@@ -10,7 +10,7 @@ if __name__ == '__main__':
   parser.add_argument("--text_cleaners", nargs="+", default=["english_cleaners2"])
 
   args = parser.parse_args()
-    
+
 
   for filelist in args.filelists:
     print("START:", filelist)
@@ -20,6 +20,6 @@ if __name__ == '__main__':
       cleaned_text = text._clean_text(original_text, args.text_cleaners)
       filepaths_and_text[i][args.text_index] = cleaned_text
 
-    new_filelist = filelist + "." + args.out_extension
+    new_filelist = f"{filelist}.{args.out_extension}"
     with open(new_filelist, "w", encoding="utf-8") as f:
       f.writelines(["|".join(x) + "\n" for x in filepaths_and_text])

@@ -6,34 +6,37 @@ import opencc
 converter = opencc.OpenCC('zaonhe')
 
 # List of (Latin alphabet, ipa) pairs:
-_latin_to_ipa = [(re.compile('%s' % x[0]), x[1]) for x in [
-    ('A', 'ᴇ'),
-    ('B', 'bi'),
-    ('C', 'si'),
-    ('D', 'di'),
-    ('E', 'i'),
-    ('F', 'ᴇf'),
-    ('G', 'dʑi'),
-    ('H', 'ᴇtɕʰ'),
-    ('I', 'ᴀi'),
-    ('J', 'dʑᴇ'),
-    ('K', 'kʰᴇ'),
-    ('L', 'ᴇl'),
-    ('M', 'ᴇm'),
-    ('N', 'ᴇn'),
-    ('O', 'o'),
-    ('P', 'pʰi'),
-    ('Q', 'kʰiu'),
-    ('R', 'ᴀl'),
-    ('S', 'ᴇs'),
-    ('T', 'tʰi'),
-    ('U', 'ɦiu'),
-    ('V', 'vi'),
-    ('W', 'dᴀbɤliu'),
-    ('X', 'ᴇks'),
-    ('Y', 'uᴀi'),
-    ('Z', 'zᴇ')
-]]
+_latin_to_ipa = [
+    (re.compile(f'{x[0]}'), x[1])
+    for x in [
+        ('A', 'ᴇ'),
+        ('B', 'bi'),
+        ('C', 'si'),
+        ('D', 'di'),
+        ('E', 'i'),
+        ('F', 'ᴇf'),
+        ('G', 'dʑi'),
+        ('H', 'ᴇtɕʰ'),
+        ('I', 'ᴀi'),
+        ('J', 'dʑᴇ'),
+        ('K', 'kʰᴇ'),
+        ('L', 'ᴇl'),
+        ('M', 'ᴇm'),
+        ('N', 'ᴇn'),
+        ('O', 'o'),
+        ('P', 'pʰi'),
+        ('Q', 'kʰiu'),
+        ('R', 'ᴀl'),
+        ('S', 'ᴇs'),
+        ('T', 'tʰi'),
+        ('U', 'ɦiu'),
+        ('V', 'vi'),
+        ('W', 'dᴀbɤliu'),
+        ('X', 'ᴇks'),
+        ('Y', 'uᴀi'),
+        ('Z', 'zᴇ'),
+    ]
+]
 
 
 def _number_to_shanghainese(num):
@@ -54,7 +57,7 @@ def latin_to_ipa(text):
 def shanghainese_to_ipa(text):
     text = number_to_shanghainese(text.upper())
     text = converter.convert(text).replace('-','').replace('$',' ')
-    text = re.sub(r'[A-Z]', lambda x: latin_to_ipa(x.group())+' ', text)
+    text = re.sub(r'[A-Z]', lambda x: f'{latin_to_ipa(x.group())} ', text)
     text = re.sub(r'[、；：]', '，', text)
     text = re.sub(r'\s*，\s*', ', ', text)
     text = re.sub(r'\s*。\s*', '. ', text)
