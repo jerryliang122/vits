@@ -39,8 +39,11 @@ def chinese_cleaners(text):
 
 
 def zh_ja_mixture_cleaners(text):
-    text = re.sub(r'\[ZH\](.*?)\[ZH\]',
-                  lambda x: chinese_to_romaji(x.group(1))+' ', text)
+    text = re.sub(
+        r'\[ZH\](.*?)\[ZH\]',
+        lambda x: f'{chinese_to_romaji(x.group(1))} ',
+        text,
+    )
     text = re.sub(r'\[JA\](.*?)\[JA\]', lambda x: japanese_to_romaji_with_accent(
         x.group(1)).replace('ts', 'ʦ').replace('u', 'ɯ').replace('...', '…')+' ', text)
     text = re.sub(r'\s+$', '', text)

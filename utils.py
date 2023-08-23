@@ -32,20 +32,20 @@ def load_checkpoint(checkpoint_path, model, optimizer=None):
     try:
       new_state_dict[k] = saved_state_dict[k]
     except:
-      logger.info("%s is not in the checkpoint" % k)
+      logger.info(f"{k} is not in the checkpoint")
       new_state_dict[k] = v
   if hasattr(model, 'module'):
     model.module.load_state_dict(new_state_dict)
   else:
     model.load_state_dict(new_state_dict)
-  logger.info("Loaded checkpoint '{}' (iteration {})" .format(
-    checkpoint_path, iteration))
+  logger.info(f"Loaded checkpoint '{checkpoint_path}' (iteration {iteration})")
   return model, optimizer, learning_rate, iteration
 
 
 def save_checkpoint(model, optimizer, learning_rate, iteration, checkpoint_path):
-  logger.info("Saving model and optimizer state at iteration {} to {}".format(
-    iteration, checkpoint_path))
+  logger.info(
+      f"Saving model and optimizer state at iteration {iteration} to {checkpoint_path}"
+  )
   if hasattr(model, 'module'):
     state_dict = model.module.state_dict()
   else:
@@ -187,16 +187,15 @@ def get_hparams_from_file(config_path):
     data = f.read()
   config = json.loads(data)
 
-  hparams =HParams(**config)
-  return hparams
+  return HParams(**config)
 
 
 def check_git_hash(model_dir):
   source_dir = os.path.dirname(os.path.realpath(__file__))
   if not os.path.exists(os.path.join(source_dir, ".git")):
-    logger.warn("{} is not a git repository, therefore hash value comparison will be ignored.".format(
-      source_dir
-    ))
+    logger.warn(
+        f"{source_dir} is not a git repository, therefore hash value comparison will be ignored."
+    )
     return
 
   cur_hash = subprocess.getoutput("git rev-parse HEAD")
@@ -205,8 +204,9 @@ def check_git_hash(model_dir):
   if os.path.exists(path):
     saved_hash = open(path).read()
     if saved_hash != cur_hash:
-      logger.warn("git hash values are different. {}(saved) != {}(current)".format(
-        saved_hash[:8], cur_hash[:8]))
+      logger.warn(
+          f"git hash values are different. {saved_hash[:8]}(saved) != {cur_hash[:8]}(current)"
+      )
   else:
     open(path, "w").write(cur_hash)
 
